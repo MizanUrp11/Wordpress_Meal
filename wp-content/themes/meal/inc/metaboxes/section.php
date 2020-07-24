@@ -12,7 +12,7 @@ function meal_section_type_metabox($metaboxes) {
                 'id'     => 'meal_section_type_section_one',
                 'fields' => array(
                     array(
-                        'name'    => 'type',
+                        'id'    => 'section_selector',
                         'title'   => __('Select section type', 'meal'),
                         'type'    => 'select',
                         'options' => array(
