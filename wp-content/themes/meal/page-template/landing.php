@@ -232,93 +232,12 @@
         </div>
     </div> <!-- .section -->
 
-    <div class="section bg-white services-section" data-aos="fade-up">
-        <div class="container">
-            <div class="row section-heading justify-content-center mb-5">
-                <div class="col-md-8 text-center">
-                    <h2 class="heading mb-3">Other Services</h2>
-                    <p class="sub-heading mb-5">Free Website Template For Restaurants Made by <a href="#">Free-Template.co</a>
-                    </p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-m mb-5d-6 col-lg-4" data-aos="fade-up">
-                    <div class="media feature-icon d-block text-center">
-                        <div class="icon">
-                            <span class="flaticon-soup"></span>
-                        </div>
-                        <div class="media-body">
-                            <h3>Quality Cuisine</h3>
-                            <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                Consonantia, there live the blind texts.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 mb-5" data-aos="fade-up" data-aos-delay="100">
-                    <div class="media feature-icon d-block text-center">
-                        <div class="icon">
-                            <span class="flaticon-vegetables"></span>
-                        </div>
-                        <div class="media-body">
-                            <h3>Fresh Food</h3>
-                            <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                Consonantia, there live the blind texts.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 mb-5" data-aos="fade-up" data-aos-delay="300">
-                    <div class="media feature-icon d-block text-center">
-                        <div class="icon">
-                            <span class="flaticon-pancake"></span>
-                        </div>
-                        <div class="media-body">
-                            <h3>Bread &amp; Pancake</h3>
-                            <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                Consonantia, there live the blind texts.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 mb-5" data-aos="fade-up" data-aos-delay="500">
-                    <div class="media feature-icon d-block text-center">
-                        <div class="icon">
-                            <span class="flaticon-tray"></span>
-                        </div>
-                        <div class="media-body">
-                            <h3>Reserve Now</h3>
-                            <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                Consonantia, there live the blind texts.</p>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-md-6 col-lg-4 mb-5" data-aos="fade-up" data-aos-delay="300">
-                    <div class="media feature-icon d-block text-center">
-                        <div class="icon">
-                            <span class="flaticon-salad"></span>
-                        </div>
-                        <div class="media-body">
-                            <h3>Fresh Vegies Salad</h3>
-                            <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                Consonantia, there live the blind texts.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 mb-5" data-aos="fade-up" data-aos-delay="500">
-                    <div class="media feature-icon d-block text-center">
-                        <div class="icon">
-                            <span class="flaticon-chicken"></span>
-                        </div>
-                        <div class="media-body">
-                            <h3>Whole Chicken</h3>
-                            <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                Consonantia, there live the blind texts.</p>
-                        </div>
-                    </div>
-                </div>
+    <?php
+        $section_id = 47;
+        get_template_part( 'section-templates/services' );
+    ?>
 
-            </div>
-        </div>
-    </div> <!-- .section -->
 
     <div class="section bg-light" data-aos="fade-up" id="section-reservation">
         <div class="container">
