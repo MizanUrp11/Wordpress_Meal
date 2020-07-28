@@ -24,66 +24,10 @@
     get_template_part( 'section-templates/gallery' );
 ?>
 
-    <div class="section bg-white" data-aos="fade-up">
-        <div class="container">
-            <div class="row mb-5">
-                <div class="col-md-12 section-heading text-center">
-                    <h2 class="heading mb-5">Meet The Chefs</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 pr-md-5 text-center mb-5">
-                    <div class="ftco-38">
-                        <div class="ftco-38-img">
-                            <div class="ftco-38-header">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/chef_1.jpg"
-                                     alt="Free Website Template for Restaurants by Free-Template.co">
-                                <h3 class="ftco-38-heading">Daniel Graham</h3>
-                                <p class="ftco-38-subheading">Master Chef</p>
-                            </div>
-                            <div class="ftco-38-body">
-                                <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                    Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
-                                    right at the coast of the Semantics, a large language ocean.</p>
-                                <p>Separated they live in Bookmarksgrove right at the coast of the Semantics, a
-                                    large language ocean. It is a paradisematic country.</p>
-                                <p>
-                                    <a href="#" class="p-2"><span class="fa fa-facebook"></span></a>
-                                    <a href="#" class="p-2"><span class="fa fa-twitter"></span></a>
-                                    <a href="#" class="p-2"><span class="fa fa-instagram"></span></a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 pl-md-5 text-center mb-5">
-                    <div class="ftco-38">
-                        <div class="ftco-38-img">
-                            <div class="ftco-38-header">
-                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/chef_2.jpg"
-                                     alt="Free Website Template for Restaurants by Free-Template.co">
-                                <h3 class="ftco-38-heading">Nick Browning</h3>
-                                <p class="ftco-38-subheading">Master Chef</p>
-                            </div>
-                            <div class="ftco-38-body">
-                                <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                    Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
-                                    right at the coast of the Semantics, a large language ocean.</p>
-                                <p>Separated they live in Bookmarksgrove right at the coast of the Semantics, a
-                                    large language ocean. It is a paradisematic country.</p>
-                                <p>
-                                    <a href="#" class="p-2"><span class="fa fa-facebook"></span></a>
-                                    <a href="#" class="p-2"><span class="fa fa-twitter"></span></a>
-                                    <a href="#" class="p-2"><span class="fa fa-instagram"></span></a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- <div class="col-md-4"></div> -->
-            </div>
-        </div>
-    </div> <!-- .section -->
+<?php
+    $section_id = 46;
+    get_template_part( 'section-templates/chef' );
+?>
 
     <div class="section bg-light" id="section-menu" data-aos="fade-up">
         <div class="container">
