@@ -150,6 +150,44 @@ function mealc_register_my_cpts_section() {
     ];
 
     register_post_type( "recipe", $args );
+
+
+    
+    /**
+     * Post Type: Reservations.
+     */
+
+    $labels = [
+        "name"                     => __( "Reservations", "meal" ),
+        "singular_name"            => __( "Reservation", "meal" ),
+    ];
+
+    $args = [
+        "label"                 => __( "Reservations", "meal" ),
+        "labels"                => $labels,
+        "description"           => "",
+        "public"                => true,
+        "publicly_queryable"    => true,
+        "show_ui"               => true,
+        "show_in_rest"          => true,
+        "rest_base"             => "",
+        "rest_controller_class" => "WP_REST_Posts_Controller",
+        "has_archive"           => false,
+        "show_in_menu"          => true,
+        "show_in_nav_menus"     => true,
+        "delete_with_user"      => false,
+        "exclude_from_search"   => false,
+        "capability_type"       => "post",
+        "map_meta_cap"          => true,
+        "hierarchical"          => false,
+        "rewrite"               => ["slug" => "reservation", "with_front" => false],
+        "query_var"             => true,
+        "menu_position"         => 5,
+        "menu_icon"             => "dashicons-admin-page",
+        "supports"              => ["title"],
+    ];
+
+    register_post_type( "reservation", $args );
 }
 
 add_action( 'init', 'mealc_register_my_cpts_section' );

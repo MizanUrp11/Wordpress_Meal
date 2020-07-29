@@ -53,6 +53,12 @@ function meal_enque_scripts() {
     wp_enqueue_script( 'meal-isotope-js', get_template_directory_uri() . '/assets/js/isotope.pkgd.min.js', array( 'meal-jquery-js' ), '1.0.0', true );
     wp_enqueue_script( 'meal-portfolio-js', get_template_directory_uri() . '/assets/js/portfolio.js', array( 'meal-jquery-js' ), '1.0.0', true );
     wp_enqueue_script( 'meal-main-js', get_template_directory_uri() . '/assets/js/main.js', array( 'meal-jquery-js' ), '1.0.0', true );
+
+    if ( is_page_template( 'page-template/landing.php' ) ) {
+        wp_enqueue_script( 'meal-reservation-js', get_template_directory_uri() . '/assets/js/reservation.js', array( 'meal-jquery-js' ), time(), true );
+        $ajaxurl = admin_url( 'admin-ajax.php' );
+        wp_localize_script( 'meal-reservation-js', 'mealurl', array( 'ajaxurl' => $ajaxurl ) );
+    }
 }
 add_action( 'wp_enqueue_scripts', 'meal_enque_scripts' );
 
@@ -70,3 +76,29 @@ function get_recipe_category( $recipe_ID ) {
     }
     return "Food";
 }
+
+function meal_reservation_ajax() {
+    if ( check_ajax_referer( 'reservation', 'rn' ) ) {
+        $name    = sanitize_text_field( $_POST['name'] );
+        $email   = sanitize_text_field( $_POST['email'] );
+        $phone   = sanitize_text_field( $_POST['phone'] );
+        $persons = sanitize_text_field( $_POST['persons'] );
+        $date    = sanitize_text_field( $_POST['date'] );
+        $time    = sanitize_text_field( $_POST['time'] );
+
+        $data = array(
+            'name'    => $name,
+            'email'   => $email,
+            'phone'   => $phone,
+            'persons' => $persons,
+            'date'    => $date,
+            'time'    => $time
+        );
+        print_r($data);
+    } else {
+        echo 'Not allowed';
+    }
+    die();
+}
+add_action( 'wp_ajax_reservation', 'meal_reservation_ajax' );
+add_action( 'wp_ajax_nopriv_reservation', 'meal_reservation_ajax' );
