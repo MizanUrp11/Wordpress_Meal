@@ -94,10 +94,46 @@ function meal_reservation_ajax() {
             'date'    => $date,
             'time'    => $time
         );
-        print_r($data);
-    } else {
-        echo 'Not allowed';
-    }
+        //print_r( $data );
+
+        $reservation_arguments = array(
+            'post_type'   => 'reservation',
+            'post_author' => 1,
+            'post_date'   => date( 'Y-m-d H:i:s' ),
+            'post_title'  => sprintf( '%s - Reservation for %s persons on %s - %s', $name, $persons, $date . " : " . $time, $email ),
+            'post_status' => 'publish',
+            'meta_input'  => $data
+        );
+
+        $reservations = new WP_Query( array(
+            'post_type'   => 'reservation',
+            'post_status' => 'publish',
+            'meta_query'  => array(
+                'relation'    => 'AND',
+                'email_check' => array(
+                    'key'   => 'email',
+                    'value' => $email
+                ),
+                'date_check'  => array(
+                    'key'   => 'date',
+                    'value' => $date
+                ),
+                'time_check'  => array(
+                    'key'   => 'time',
+                    'value' => $time
+                )
+            )
+        ) );
+        if($reservations->found_posts > 0){
+            echo 'duplicate';
+        }else{
+            $wp_error = '';
+            wp_insert_post( $reservation_arguments, $wp_error );
+            if ( !$wp_error ) {
+                echo 'successful';
+            }  
+        }
+    } 
     die();
 }
 add_action( 'wp_ajax_reservation', 'meal_reservation_ajax' );

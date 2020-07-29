@@ -14,7 +14,11 @@
           rn: $("#rn").val(),
         },
         function (data) {
-          console.log(data);
+          if ("successful" == data) {
+            alert("Reservation Successfull");
+          } else if ("duplicate") {
+            alert("You have already placed a reservation.");
+          }
         }
       );
       return false;
