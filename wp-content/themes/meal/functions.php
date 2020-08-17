@@ -20,6 +20,7 @@ define( 'CS_ACTIVE_LIGHT_THEME', true ); // default false
 function meal_theme_supports() {
     add_theme_support( 'post-thumbnails' );
 }
+register_nav_menu( 'primary', __( 'Main Menu', 'meal' ) );
 add_action( 'after_setup_theme', 'meal_theme_supports' );
 
 function meal_enque_scripts() {
