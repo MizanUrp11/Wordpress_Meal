@@ -57,8 +57,10 @@ function meal_enque_scripts() {
 
     if ( is_page_template( 'page-template/landing.php' ) ) {
         wp_enqueue_script( 'meal-reservation-js', get_template_directory_uri() . '/assets/js/reservation.js', array( 'meal-jquery-js' ), time(), true );
+        wp_enqueue_script( 'meal-contact-js', get_template_directory_uri() . '/assets/js/contact.js', array( 'meal-jquery-js' ), time(), true );
         $ajaxurl = admin_url( 'admin-ajax.php' );
         wp_localize_script( 'meal-reservation-js', 'mealurl', array( 'ajaxurl' => $ajaxurl ) );
+        wp_localize_script( 'meal-contact-js', 'mealurl', array( 'ajaxurl' => $ajaxurl ) );
     }
 }
 add_action( 'wp_enqueue_scripts', 'meal_enque_scripts' );
@@ -221,3 +223,18 @@ function meal_delete_transient( $screen ) {
     }
 }
 add_action( 'admin_enqueue_scripts', 'meal_delete_transient' );
+
+function meal_contact_email() {
+    $name = isset( $_POST['name'] ) ? $_POST['name'] : '';
+    $email = isset( $_POST['email'] ) ? $_POST['email'] : '';
+    $phone = isset( $_POST['phone'] ) ? $_POST['phone'] : '';
+    $message = isset( $_POST['message'] ) ? $_POST['message'] : '';
+
+    $_message = sprintf("%s \nFrom: %s\nEmail: %s\nPhone: %s",$message,$name,$email,$phone);
+    $admin_email = get_option( 'admin_email' );
+
+    wp_mail( 'mrn1105009@gmail.com', $_message, "From: noyon.mdmizan@gmail.com\r\n" );
+    die('successfull');
+}
+add_action( 'wp_ajax_contact', 'meal_contact_email' );
+add_action( 'wp_ajax_nopriv_contact', 'meal_contact_email' );
