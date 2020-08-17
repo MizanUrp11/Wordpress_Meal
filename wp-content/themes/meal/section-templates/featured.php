@@ -1,8 +1,8 @@
 <?php
-    global $section_id;
-    $meal_section_meta = get_post_meta( $section_id, 'meal_page_section_type_featured', true );
+    global $meal_section_id;
+    $meal_section_meta = get_post_meta( $meal_section_id, 'meal_page_section_type_featured', true );
 
-    $meal_section             = get_post( $section_id );
+    $meal_section             = get_post( $meal_section_id );
     $meal_section_title       = $meal_section->post_title;
     $meal_section_description = $meal_section->post_content;
 ?>

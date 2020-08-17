@@ -9,43 +9,17 @@
 <div class="main-wrap " id="section-home">
 
 <?php
-    $section_id = 30;
-    get_template_part( 'section-templates/banar' );
+    $meal_current_page_id = get_the_ID(  );
+    $meal_page_meta = get_post_meta( $meal_current_page_id, 'meal_page_section_type', true );
+    foreach($meal_page_meta['sections'] as $meal_page_section):
+        $meal_section_id = $meal_page_section['section'];
+        $meal_section_meta = get_post_meta( $meal_section_id, 'meal_section_type', true );
+        //print_r($meal_section_meta);
+        $meal_section_type = $meal_section_meta['section_selector'];
+        get_template_part( 'section-templates/'.$meal_section_type );
+    endforeach;
+    //die();
 ?>
-
-
-<?php
-    $section_id = 32;
-    get_template_part( 'section-templates/featured' );
-?>
-
-<?php
-    $section_id = 31;
-    get_template_part( 'section-templates/gallery' );
-?>
-
-<?php
-    $section_id = 46;
-    get_template_part( 'section-templates/chef' );
-?>
-
-<?php
-    $section_id = 49;
-    get_template_part( 'section-templates/menu' );
-?>
-
-
-    <?php
-        $section_id = 47;
-        get_template_part( 'section-templates/services' );
-    ?>
-
-    <?php
-        $section_id = 63;
-        get_template_part( 'section-templates/reservation' );
-    ?>
-
-    
 
     <div class="section bg-white" data-aos="fade-up">
         <div class="container">
