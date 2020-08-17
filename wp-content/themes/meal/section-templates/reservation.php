@@ -82,6 +82,9 @@
                             <div class="col-md-4">
                                 <input type="submit" id="reserveNow" class="btn btn-primary btn-outline-primary btn-block"
                                        value="Reserve Now">
+                                       <a target="_blank" href="#" class="btn btn-primary btn-outline-primary btn-block" id="payNow" style="display: none;">
+                                       <?php _e('Pay to Confirm','meal'); ?>
+                                       </a>
                             </div>
                         </div>
                     </form>

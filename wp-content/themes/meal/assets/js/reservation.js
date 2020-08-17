@@ -14,10 +14,13 @@
           rn: $("#rn").val(),
         },
         function (data) {
-          if ("successful" == data) {
-            alert("Reservation Successfull");
-          } else if ("duplicate") {
+          console.log(data);
+          if ("duplicate" == data) {
             alert("You have already placed a reservation.");
+          } else {
+            $("#payNow").attr("href", data);
+            $("#reserveNow").hide();
+            $("#payNow").show();
           }
         }
       );

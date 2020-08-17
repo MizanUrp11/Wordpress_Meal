@@ -52,7 +52,7 @@ function meal_enque_scripts() {
     wp_enqueue_script( 'meal-imagesloaded-js', get_template_directory_uri() . '/assets/js/imagesloaded.js', array( 'meal-jquery-js' ), '1.0.0', true );
     wp_enqueue_script( 'meal-isotope-js', get_template_directory_uri() . '/assets/js/isotope.pkgd.min.js', array( 'meal-jquery-js' ), '1.0.0', true );
     wp_enqueue_script( 'meal-portfolio-js', get_template_directory_uri() . '/assets/js/portfolio.js', array( 'meal-jquery-js' ), '1.0.0', true );
-    wp_enqueue_script( 'meal-main-js', get_template_directory_uri() . '/assets/js/main.js', array( 'meal-jquery-js' ), '1.0.0', true );
+    wp_enqueue_script( 'meal-main-js', get_template_directory_uri() . '/assets/js/main.js', array( 'meal-jquery-js' ), time(), true );
 
     if ( is_page_template( 'page-template/landing.php' ) ) {
         wp_enqueue_script( 'meal-reservation-js', get_template_directory_uri() . '/assets/js/reservation.js', array( 'meal-jquery-js' ), time(), true );
@@ -124,17 +124,76 @@ function meal_reservation_ajax() {
                 )
             )
         ) );
-        if($reservations->found_posts > 0){
+        if ( $reservations->found_posts > 0 ) {
             echo 'duplicate';
-        }else{
+        } else {
             $wp_error = '';
-            wp_insert_post( $reservation_arguments, $wp_error );
+
+            $reservation_id = wp_insert_post( $reservation_arguments, $wp_error );
+
             if ( !$wp_error ) {
-                echo 'successful';
-            }  
+                $_name      = explode( ' ', $name );
+                $order_data = array(
+                    'first_name' => $_name[0],
+                    'last_name'  => isset( $_name[1] ) ? $_name[1] : '',
+                    'email'      => $email,
+                    'phone'      => $phone
+                );
+                $order = wc_create_order();
+                $order->set_address( $order_data );
+                $order->add_product( wc_get_product( 72 ), 1 );
+                $order->set_customer_note( $reservation_id );
+                $order->calculate_totals();
+
+                add_post_meta( $reservation_id, 'order_id', $order->get_id() );
+
+                echo $order->get_checkout_payment_url();
+            }
         }
-    } 
+    }
+    //Next start from 12:00 min of 25.18 tutorial LWHH
     die();
 }
 add_action( 'wp_ajax_reservation', 'meal_reservation_ajax' );
 add_action( 'wp_ajax_nopriv_reservation', 'meal_reservation_ajax' );
+
+function meal_checkout_fields( $fields ) {
+    //remove billing fields
+    unset( $fields['billing']['billing_company'] );
+    unset( $fields['billing']['billing_address_1'] );
+    unset( $fields['billing']['billing_address_2'] );
+    unset( $fields['billing']['billing_city'] );
+    unset( $fields['billing']['billing_postcode'] );
+    unset( $fields['billing']['billing_country'] );
+    unset( $fields['billing']['billing_state'] );
+
+    //remove shipping fields
+    unset( $fields['shipping']['shipping_first_name'] );
+    unset( $fields['shipping']['shipping_last_name'] );
+    unset( $fields['shipping']['shipping_company'] );
+    unset( $fields['shipping']['shipping_address_1'] );
+    unset( $fields['shipping']['shipping_address_2'] );
+    unset( $fields['shipping']['shipping_city'] );
+    unset( $fields['shipping']['shipping_postcode'] );
+    unset( $fields['shipping']['shipping_country'] );
+    unset( $fields['shipping']['shipping_state'] );
+
+    //remove order comments fields
+    unset( $fields['order']['order_comments'] );
+    return $fields;
+}
+add_filter( 'woocommerce_checkout_fields', 'meal_checkout_fields' );
+
+function meal_order_status_processing( $order_id ) {
+    $order          = wc_get_order( $order_id );
+    $reservation_id = $order->get_customer_note();
+    if ( $reservation_id ) {
+        $reservation = get_post( $reservation_id );
+        wp_update_post( array(
+            'ID'         => $reservation_id,
+            'post_title' => '[Paid] - ' . $reservation->post_title
+        ) );
+        add_post_meta( $reservation_id, 'paid', 1 );
+    }
+}
+add_filter( 'woocommerce_order_status_processing', 'meal_order_status_processing' );
