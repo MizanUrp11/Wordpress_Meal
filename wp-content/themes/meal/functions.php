@@ -19,6 +19,8 @@ define( 'CS_ACTIVE_LIGHT_THEME', true ); // default false
 
 function meal_theme_supports() {
     add_theme_support( 'post-thumbnails' );
+    add_theme_support( 'html5', array( 'comment-list', 'comment-form', 'search-form' ) );
+
 }
 register_nav_menu( 'primary', __( 'Main Menu', 'meal' ) );
 add_action( 'after_setup_theme', 'meal_theme_supports' );
@@ -253,3 +255,15 @@ function meal_change_nav_menu($menus){
     return $menus;
 }
 add_filter( 'wp_nav_menu_objects', 'meal_change_nav_menu' );
+
+function meal_comment_form_fieds($fields){
+    // echo '<pre>';
+    // print_r($fields);
+    // echo '</pre>';
+    $comment_field = $fields['comment'];
+    unset($fields['comment']);
+    unset($fields['cookies']);
+    $fields['comment'] = $comment_field;
+    return $fields;
+}
+add_filter( 'comment_form_fields', 'meal_comment_form_fieds' );
