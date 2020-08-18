@@ -12,7 +12,7 @@
     $meal_section_description = $meal_section->post_content;
 ?>
 
-<div class="cover_1 overlay bg-slant-white bg-light">
+<div class="cover_1 overlay bg-slant-white bg-light" id="<?php echo esc_attr($meal_section->post_name); ?>">
         <div class="img_bg" style="background-image: url(<?php echo esc_url( $meal_banar_image[0] ); ?>);" data-stellar-background-ratio="0.5">
             <div class="container">
                 <div class="row align-items-center justify-content-center text-center">

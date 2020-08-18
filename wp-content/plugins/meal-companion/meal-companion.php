@@ -61,7 +61,7 @@ function mealc_register_my_cpts_section() {
         "label"                 => __( "Sections", "meal" ),
         "labels"                => $labels,
         "description"           => "",
-        "public"                => true,
+        "public"                => false,
         "publicly_queryable"    => false,
         "show_ui"               => true,
         "show_in_rest"          => true,
