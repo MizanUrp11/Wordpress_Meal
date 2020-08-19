@@ -65,6 +65,20 @@ function meal_enque_scripts() {
         wp_localize_script( 'meal-reservation-js', 'mealurl', array( 'ajaxurl' => $ajaxurl ) );
         wp_localize_script( 'meal-contact-js', 'mealurl', array( 'ajaxurl' => $ajaxurl ) );
     }
+
+    if ( is_page_template( 'page-template/mailchimp.php' ) ) {
+        wp_enqueue_style( 'mailchimp-style-css', '//cdn-images.mailchimp.com/embedcode/classic-10_7.css', null, '1.0.0' );
+        $style = <<<EOD
+        #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+EOD;
+        wp_add_inline_style( 'mailchimp-style-css', $style );
+
+        wp_enqueue_script( 'mailchimp-script-js', '//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js', array( 'meal-jquery-js' ), '1.0.0', true );
+        $script = <<<EOD
+        (function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday';}(jQuery));var $mcj = jQuery.noConflict(true);
+EOD;
+        wp_add_inline_script( 'mailchimp-script-js', $script );
+    }
 }
 add_action( 'wp_enqueue_scripts', 'meal_enque_scripts' );
 
@@ -228,28 +242,28 @@ function meal_delete_transient( $screen ) {
 add_action( 'admin_enqueue_scripts', 'meal_delete_transient' );
 
 function meal_contact_email() {
-    $name = isset( $_POST['name'] ) ? $_POST['name'] : '';
-    $email = isset( $_POST['email'] ) ? $_POST['email'] : '';
-    $phone = isset( $_POST['phone'] ) ? $_POST['phone'] : '';
+    $name    = isset( $_POST['name'] ) ? $_POST['name'] : '';
+    $email   = isset( $_POST['email'] ) ? $_POST['email'] : '';
+    $phone   = isset( $_POST['phone'] ) ? $_POST['phone'] : '';
     $message = isset( $_POST['message'] ) ? $_POST['message'] : '';
 
-    $_message = sprintf("%s \nFrom: %s\nEmail: %s\nPhone: %s",$message,$name,$email,$phone);
+    $_message    = sprintf( "%s \nFrom: %s\nEmail: %s\nPhone: %s", $message, $name, $email, $phone );
     $admin_email = get_option( 'admin_email' );
 
     wp_mail( 'mrn1105009@gmail.com', $_message, "From: noyon.mdmizan@gmail.com\r\n" );
-    die('successfull');
+    die( 'successfull' );
 }
 add_action( 'wp_ajax_contact', 'meal_contact_email' );
 add_action( 'wp_ajax_nopriv_contact', 'meal_contact_email' );
 
-function meal_change_nav_menu($menus){
-    $string_to_replace = home_url('/').'index.php/'.'section/';
-    if(is_front_page(  )){
-        foreach($menus as $menu){
-            $new_url = str_replace($string_to_replace,"#",$menu->url);   
-            if($string_to_replace != $new_url){
-                $new_url = rtrim($new_url,"/");
-            }        
+function meal_change_nav_menu( $menus ) {
+    $string_to_replace = home_url( '/' ) . 'index.php/' . 'section/';
+    if ( is_front_page() ) {
+        foreach ( $menus as $menu ) {
+            $new_url = str_replace( $string_to_replace, "#", $menu->url );
+            if ( $string_to_replace != $new_url ) {
+                $new_url = rtrim( $new_url, "/" );
+            }
             $menu->url = $new_url;
         }
     }
@@ -257,22 +271,22 @@ function meal_change_nav_menu($menus){
 }
 add_filter( 'wp_nav_menu_objects', 'meal_change_nav_menu' );
 
-function meal_comment_form_fieds($fields){
+function meal_comment_form_fieds( $fields ) {
     // echo '<pre>';
     // print_r($fields);
     // echo '</pre>';
     $comment_field = $fields['comment'];
-    unset($fields['comment']);
-    unset($fields['cookies']);
+    unset( $fields['comment'] );
+    unset( $fields['cookies'] );
     $fields['comment'] = $comment_field;
     return $fields;
 }
 add_filter( 'comment_form_fields', 'meal_comment_form_fieds' );
 
-function meal_pricing_table_filter($item){
-    if(trim($item) == '1'){
+function meal_pricing_table_filter( $item ) {
+    if ( trim( $item ) == '1' ) {
         return '<i class="fa fa-check plan-active-color fa-2x">';
-    }else if(trim($item) == '0'){
+    } else if ( trim( $item ) == '0' ) {
         return '<i class="fa fa-ellipsis-h plan-inactive-color fa-2x">';
     }
     return $item;
