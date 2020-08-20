@@ -1,4 +1,4 @@
-<?php get_header();?>
+ <?php get_header();?>
 
     <div class="main-wrap " id="section-home">
 

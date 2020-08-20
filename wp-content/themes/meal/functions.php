@@ -57,6 +57,7 @@ function meal_enque_scripts() {
     wp_enqueue_script( 'meal-isotope-js', get_template_directory_uri() . '/assets/js/isotope.pkgd.min.js', array( 'meal-jquery-js' ), '1.0.0', true );
     wp_enqueue_script( 'meal-portfolio-js', get_template_directory_uri() . '/assets/js/portfolio.js', array( 'meal-jquery-js' ), '1.0.0', true );
     wp_enqueue_script( 'meal-main-js', get_template_directory_uri() . '/assets/js/main.js', array( 'meal-jquery-js' ), time(), true );
+    wp_enqueue_script( 'meal-loadmore-js', get_template_directory_uri() . '/assets/js/laodmore.js', array( 'meal-jquery-js' ), time(), true );
 
     if ( is_page_template( 'page-template/landing.php' ) ) {
         wp_enqueue_script( 'meal-reservation-js', get_template_directory_uri() . '/assets/js/reservation.js', array( 'meal-jquery-js' ), time(), true );
@@ -292,3 +293,8 @@ function meal_pricing_table_filter( $item ) {
     return $item;
 }
 add_filter( 'meal_pricing_item', 'meal_pricing_table_filter' );
+
+function get_max_num_pages(){
+    global $wp_query;
+    return $wp_query->max_num_pages;
+}

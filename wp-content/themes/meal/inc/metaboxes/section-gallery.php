@@ -27,6 +27,12 @@ function meal_gallery_section__metbox( $metaboxes ) {
                 'id'     => 'meal_page_section_type_gallery',
                 'fields' => array(
                     array(
+                        'id'      => 'nimage', // this is must be unique
+                        'type'    => 'text',
+                        'title'   => __( 'Items to Show', 'meal' ),
+                        'default' => 6
+                    ),
+                    array(
                         'id'              => 'portfolio',
                         'title'           => __( 'Portfolio', 'meal' ),
                         'type'            => 'group',
