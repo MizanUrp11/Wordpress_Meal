@@ -55,7 +55,7 @@ function meal_enque_scripts() {
     wp_enqueue_script( 'meal-aos-js', get_template_directory_uri() . '/assets/js/aos.js', array( 'meal-jquery-js' ), '1.0.0', true );
     wp_enqueue_script( 'meal-imagesloaded-js', get_template_directory_uri() . '/assets/js/imagesloaded.js', array( 'meal-jquery-js' ), '1.0.0', true );
     wp_enqueue_script( 'meal-isotope-js', get_template_directory_uri() . '/assets/js/isotope.pkgd.min.js', array( 'meal-jquery-js' ), '1.0.0', true );
-    wp_enqueue_script( 'meal-portfolio-js', get_template_directory_uri() . '/assets/js/portfolio.js', array( 'meal-jquery-js' ), '1.0.0', true );
+    wp_enqueue_script( 'meal-portfolio-js', get_template_directory_uri() . '/assets/js/portfolio.js', array( 'meal-jquery-js' ), time(), true );
     wp_enqueue_script( 'meal-main-js', get_template_directory_uri() . '/assets/js/main.js', array( 'meal-jquery-js' ), time(), true );
     wp_enqueue_script( 'meal-loadmore-js', get_template_directory_uri() . '/assets/js/laodmore.js', array( 'meal-jquery-js' ), time(), true );
 
@@ -65,6 +65,7 @@ function meal_enque_scripts() {
         $ajaxurl = admin_url( 'admin-ajax.php' );
         wp_localize_script( 'meal-reservation-js', 'mealurl', array( 'ajaxurl' => $ajaxurl ) );
         wp_localize_script( 'meal-contact-js', 'mealurl', array( 'ajaxurl' => $ajaxurl ) );
+        wp_localize_script( 'meal-portfolio-js', 'mealurl', array( 'ajaxurl' => $ajaxurl ) );
     }
 
     if ( is_page_template( 'page-template/mailchimp.php' ) ) {
@@ -294,7 +295,66 @@ function meal_pricing_table_filter( $item ) {
 }
 add_filter( 'meal_pricing_item', 'meal_pricing_table_filter' );
 
-function get_max_num_pages(){
+function get_max_num_pages() {
     global $wp_query;
     return $wp_query->max_num_pages;
 }
+
+function meal_load_portfolio_items() {
+    if ( wp_verify_nonce( $_POST['nonce'], 'loadmorep' ) ) {
+        
+        $meal_section_id     = $_POST['sid'];
+        $meal_section_meta   = get_post_meta( $meal_section_id, 'meal_page_section_type_gallery', true );
+        $meal_images_to_show = $meal_section_meta['nimage'];
+        $meal_start_offset   = $_POST['offset'];
+        $meal_end_offset     = $_POST['offset'] + $meal_images_to_show;
+
+        $meal_section             = get_post( $meal_section_id );
+        $meal_section_title       = $meal_section->post_title;
+        $meal_section_description = $meal_section->post_content;
+
+        $meal_counter       = 0;
+        $meal_gallery_items = $meal_section_meta['portfolio'];
+        $meal_gallery_items = array_slice($meal_gallery_items,$meal_start_offset);
+        echo '<div class="portfolio">';
+        foreach ( $meal_gallery_items as $meal_gallery_item ) {
+            if ( $meal_counter >= $meal_images_to_show ) {
+                break;
+            }
+            $meal_gallery_item_image_src_medium = wp_get_attachment_image_src( $meal_gallery_item['image'], 'medium' );
+            $meal_gallery_item_image_src_large  = wp_get_attachment_image_src( $meal_gallery_item['image'], 'full' );
+            $meal_gallery_item_title            = $meal_gallery_item['title'];
+            $meal_item_class                    = str_replace( ',', ' ', $meal_gallery_item['categories'] );
+            $meal_item_class_array              = explode( ',', $meal_gallery_item['categories'] );
+            ?>
+                        <div class="portfolio-item <?php echo esc_attr( $meal_item_class ); ?>">
+                            <a href="<?php echo esc_attr( $meal_gallery_item_image_src_large[0] ); ?>" class="portfolio-image popup-gallery" title="Bread">
+                                <img src="<?php echo esc_url( $meal_gallery_item_image_src_medium[0] ); ?>" alt="" />
+                                <div class="portfolio-hover-title">
+                                    <div class="portfolio-content">
+                                        <h4>
+                                            <?php echo esc_html( $meal_gallery_item_title ); ?>
+                                        </h4>
+                                        <div class="portfolio-category">
+                                            <?php
+foreach ( $meal_item_class_array as $meal_item_class ) {
+                ?>
+                                                <span><?php echo esc_html( $meal_item_class ); ?></span>
+                                            <?php
+}
+            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    <?php
+$meal_counter++;
+        }
+
+        echo "</div>";
+    }
+    die();
+}
+add_action( 'wp_ajax_loadmorep', 'meal_load_portfolio_items' );
+add_action( 'wp_ajax_nopriv_loadmorep', 'meal_load_portfolio_items' );

@@ -2,10 +2,10 @@
 global $meal_section_id;
 $meal_section_meta = get_post_meta( $meal_section_id, 'meal_page_section_type_gallery', true );
 
-$meal_section       = get_post( $meal_section_id );
-$meal_section_title = $meal_section->post_title;
-$meal_section_description
-= $meal_section->post_content;?>
+$meal_section             = get_post( $meal_section_id );
+$meal_section_title       = $meal_section->post_title;
+$meal_section_description = $meal_section->post_content;
+?>
 
 <div class="section pb-3 bg-white" id="section-about" data-aos="fade-up" id="<?php echo esc_attr( $meal_section->post_name ); ?>">
     <div class="container">
@@ -40,9 +40,7 @@ foreach ( $meal_gallery_items as $meal_gallery_item ) {
     $meal_gallery_item_categories = explode( ',', $meal_gallery_item['categories'] );
     foreach ( $meal_gallery_item_categories as $meal_gallery_item_category ) {
         $meal_gallery_item_category = trim( $meal_gallery_item_category );
-        if (
-            !in_array( $meal_gallery_item_category, $meal_item_categories )
-        ) {
+        if ( !in_array( $meal_gallery_item_category, $meal_item_categories ) ) {
             array_push(
                 $meal_item_categories,
                 $meal_gallery_item_category
@@ -77,7 +75,10 @@ foreach ( $meal_item_categories as $meal_item_category ) {
                     </ul>
                 </div>
 
-                <div class="portfolio-grid portfolio-gallery grid-4 gutter" data-images="<?php echo esc_attr($meal_images_to_show); ?>">
+                <?php
+wp_nonce_field( 'loadmorep', 'loadmorep' );
+?>
+                <div class="portfolio-grid portfolio-gallery grid-4 gutter" data-images="<?php echo esc_attr( $meal_images_to_show ); ?>" data-sid="<?php echo esc_attr( $meal_section_id ); ?>" data-ni="<?php echo esc_attr($meal_images_to_show); ?>">
                     <?php
 $meal_counter        = 0;
 $meal_images_to_show = $meal_section_meta['nimage'];
@@ -85,25 +86,11 @@ foreach ( $meal_gallery_items as $meal_gallery_item ) {
     if ( $meal_counter >= $meal_images_to_show ) {
         break;
     }
-    $meal_gallery_item_image_src_medium = wp_get_attachment_image_src(
-        $meal_gallery_item['image'],
-        'medium'
-    );
-    $meal_gallery_item_image_src_large = wp_get_attachment_image_src(
-        $meal_gallery_item['image'],
-        'full'
-    );
-    $meal_gallery_item_title =
-        $meal_gallery_item['title'];
-    $meal_item_class = str_replace(
-        ',',
-        ' ',
-        $meal_gallery_item['categories']
-    );
-    $meal_item_class_array = explode(
-        ',',
-        $meal_gallery_item['categories']
-    );?>
+    $meal_gallery_item_image_src_medium = wp_get_attachment_image_src( $meal_gallery_item['image'], 'medium' );
+    $meal_gallery_item_image_src_large  = wp_get_attachment_image_src( $meal_gallery_item['image'], 'full' );
+    $meal_gallery_item_title            = $meal_gallery_item['title'];
+    $meal_item_class                    = str_replace( ',', ' ', $meal_gallery_item['categories'] );
+    $meal_item_class_array              = explode( ',', $meal_gallery_item['categories'] );?>
                         <div class="portfolio-item <?php echo esc_attr( $meal_item_class ); ?>">
                             <a href="<?php echo esc_attr( $meal_gallery_item_image_src_large[0] ); ?>" class="portfolio-image popup-gallery" title="Bread">
                                 <img src="<?php echo esc_url( $meal_gallery_item_image_src_medium[0] ); ?>" alt="" />
@@ -130,11 +117,12 @@ foreach ( $meal_item_class_array as $meal_item_class ) {
                     <?php
 $meal_counter++;
 }
+echo "</div>";
 ?>
                 </div>
-                <a name="loadmorep" id="loadmorep" class="btn btn-primary" href="#" role="button"><?php _e('Load More','meal'); ?></a>
             </div>
         </div>
+        <a id="loadmorepb" class="btn btn-primary" href="#" role="button"><?php _e( 'Load More', 'meal' );?></a>
     </div>
 </div>
 <!-- .section -->
