@@ -122,14 +122,17 @@ function meal_get_theme_options() {
             ),
         ),
     );
-    $token = get_option( 'meal_theme_token' );
+    $token         = get_option( 'meal_theme_token' );
+    $username      = cs_get_option( 'meal_username' );
+    $purchase_code = cs_get_option( 'meal_purchase_code' );
 
     if ( get_option( 'meal_theme_activation' ) == 1 ) {
+        $theme_demo_url                           = "http://localhost/wp/verify/deliver.php?u={$username}&pc={$purchase_code}&token={$token}&file=theme-demo";
         $options[count( $options ) - 1]['fields'][] = array(
-            'id'    => 'meal_download_file',
-            'type'  => 'notice',
-            'class' => 'success',
-            'content' => __( 'Download From Here', 'meal' ),
+            'id'      => 'meal_download_file',
+            'type'    => 'notice',
+            'class'   => 'success',
+            'content' => "Download from <a href={$theme_demo_url} target='_blank'>Here</a>",
         );
     }
 
