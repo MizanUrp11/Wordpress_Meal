@@ -107,23 +107,35 @@ function meal_get_theme_options() {
     $options   = array();
     $options[] = array(
         'name'   => 'meal_theme_activation',
-        'title'  => __('Theme Activation', 'meal'),
+        'title'  => __( 'Theme Activation', 'meal' ),
         'icon'   => 'fa fa-heart',
         'fields' => array(
             array(
                 'id'    => 'meal_username',
                 'type'  => 'text',
-                'title' => __('Username', 'meal'),
+                'title' => __( 'Username', 'meal' ),
             ),
             array(
                 'id'    => 'meal_purchase_code',
                 'type'  => 'text',
-                'title' => __('Purchase Code', 'meal'),
+                'title' => __( 'Purchase Code', 'meal' ),
             ),
         ),
     );
+    $token = get_option( 'meal_theme_token' );
+
+    if ( get_option( 'meal_theme_activation' ) == 1 ) {
+        $options[count( $options ) - 1]['fields'][] = array(
+            'id'    => 'meal_download_file',
+            'type'  => 'notice',
+            'class' => 'success',
+            'content' => __( 'Download From Here', 'meal' ),
+        );
+    }
+
     return $options;
 }
+
 
 function get_recipe_category( $recipe_ID ) {
     $terms = wp_get_post_terms( $recipe_ID, 'category' );
@@ -393,3 +405,26 @@ $meal_counter++;
 }
 add_action( 'wp_ajax_loadmorep', 'meal_load_portfolio_items' );
 add_action( 'wp_ajax_nopriv_loadmorep', 'meal_load_portfolio_items' );
+
+function meal_verify_purchase() {
+    $username      = cs_get_option( 'meal_username' );
+    $purchase_code = cs_get_option( 'meal_purchase_code' );
+
+    if ( $username != '' && $purchase_code != '' ) {
+        $url      = "http://localhost/wp/verify/verify.php?u={$username}&pc={$purchase_code}";
+        $response = wp_remote_get( $url );
+        $body     = $response['body'];
+
+        if ( 'error' != $body ) {
+            update_option( 'meal_theme_activation', 1 );
+            update_option( 'meal_theme_token', $body );
+        } else {
+            update_option( 'meal_theme_activation', 0 );
+            update_option( 'meal_theme_token', '' );
+        }
+
+    }
+
+}
+
+add_action( 'after_setup_theme', 'meal_verify_purchase' );
