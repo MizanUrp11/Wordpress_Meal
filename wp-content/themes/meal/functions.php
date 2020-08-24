@@ -11,7 +11,7 @@ require_once get_theme_file_path( '/inc/metaboxes/section-services.php' );
 require_once get_theme_file_path( '/inc/metaboxes/taxonomy-featured.php' );
 require_once get_theme_file_path( '/inc/metaboxes/section-recipe.php' );
 
-define( 'CS_ACTIVE_FRAMEWORK', false ); // default true
+define( 'CS_ACTIVE_FRAMEWORK', true ); // default true
 define( 'CS_ACTIVE_METABOX', true ); // default true
 define( 'CS_ACTIVE_TAXONOMY', true ); // default true
 define( 'CS_ACTIVE_SHORTCODE', false ); // default true
@@ -85,10 +85,45 @@ EOD;
 add_action( 'wp_enqueue_scripts', 'meal_enque_scripts' );
 
 function meal_codestar_init() {
-    CSFramework_Metabox::instance( array() );
-    CSFramework_Taxonomy::instance( array() );
+    CSFramework_Metabox::instance(array());
+    CSFramework_Taxonomy::instance(array());
+
+    $settings = array(
+        'menu_title'      => __('Meal Options', 'meal'),
+        'menu_type'       => 'submenu',
+        'menu_parent'     => 'themes.php',
+        'menu_slug'       => 'meal_options_panel',
+        'framework_title' => __('Activate', 'meal'),
+        'menu_icon'       => 'dashicons-dashboard',
+        'menu_position'   => 20,
+        'ajax_save'       => false,
+        'show_reset_all'  => true,
+    );
+    new CSFramework($settings, meal_get_theme_options());
 }
 add_action( 'init', 'meal_codestar_init' );
+
+function meal_get_theme_options() {
+    $options   = array();
+    $options[] = array(
+        'name'   => 'meal_theme_activation',
+        'title'  => __('Theme Activation', 'meal'),
+        'icon'   => 'fa fa-heart',
+        'fields' => array(
+            array(
+                'id'    => 'meal_username',
+                'type'  => 'text',
+                'title' => __('Username', 'meal'),
+            ),
+            array(
+                'id'    => 'meal_purchase_code',
+                'type'  => 'text',
+                'title' => __('Purchase Code', 'meal'),
+            ),
+        ),
+    );
+    return $options;
+}
 
 function get_recipe_category( $recipe_ID ) {
     $terms = wp_get_post_terms( $recipe_ID, 'category' );
