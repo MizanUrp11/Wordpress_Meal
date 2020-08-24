@@ -421,6 +421,7 @@ function meal_verify_purchase() {
         if ( 'error' != $body ) {
             update_option( 'meal_theme_activation', 1 );
             update_option( 'meal_theme_token', $body );
+            require_once get_theme_file_path( "/inc/tgm.php" );
         } else {
             update_option( 'meal_theme_activation', 0 );
             update_option( 'meal_theme_token', '' );
@@ -431,3 +432,10 @@ function meal_verify_purchase() {
 }
 
 add_action( 'after_setup_theme', 'meal_verify_purchase' );
+
+function meal_allow_external_host($allow,$host,$url){
+    if('http://localhost/wp/verify/verify.php' == $host){
+        return true;
+    }
+}
+add_filter('http_request_host_is_external','meal_allow_external_host',10,3);
